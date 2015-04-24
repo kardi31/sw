@@ -1,0 +1,46 @@
+<article id="content">
+	<div class="wrapper">
+		<section class="col1">
+			<h2 class="under">Napisz do nas</h2>
+                        <?php echo $this->messages()->render(); ?>
+			<form id="ContactForm" method="post">
+			<div>
+				<div  class="wrapper">
+					<span>Imie i nazwisko:</span>
+					<?php echo $this->form->name; ?>
+				</div>
+				
+				<div  class="wrapper">
+					<span>Email:</span>
+					<?php echo $this->form->email; ?>
+				</div>
+				<div  class="wrapper">
+					<span>Tytuł</span>
+					<?php echo $this->form->subject; ?>
+				</div>
+				<div  class="textarea_box">
+					<span>Wiadomość:</span>
+					<?php echo $this->form->message; ?>
+				</div>
+			     
+				<?php echo $this->form->captcha; ?>
+				<?php echo $this->form->submit; ?>
+			</div>
+		</form>
+		</section>
+		<section class="col2 pad_left1">
+			<h2 class="under">Kontakt</h2>
+			<div id="address" class="vcard">
+                            <span class="org"> Akademia Piłkarska Świt Krzeszowice</span><br /><br />
+                            <span class="adr"> <?php echo $this->cms()->setting('address'); ?>  <span class="postal-code"> <?php echo $this->cms()->setting('postal_code'); ?></span><br />
+			  <span class="locality">  <?php echo $this->cms()->setting('city'); ?>,
+			      <?php echo $this->cms()->setting('province'); ?> </span><br/>
+                              <span class="tel"><a href="tel:<?php echo str_replace($this->cms()->setting('phone'),' ',''); ?>"><?php echo $this->cms()->setting('phone'); ?></a></span><br></span>
+			    <a href="mailto:<?php echo $this->cms()->setting('contact_email'); ?>" class="email color2"><?php echo $this->cms()->setting('contact_email'); ?></a>
+			</div>
+					<br /><br />
+					<iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d2557.224816513646!2d19.633148!3d50.138225999999996!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4716f0dbeb34d443%3A0x761b91863e5a58a5!2s%C5%9Awit+Krzeszowice!5e0!3m2!1spl!2spl!4v1424021254006" width="230" height="400" frameborder="0" style="border:0"></iframe>
+		</section>
+	</div>
+
+</article>
