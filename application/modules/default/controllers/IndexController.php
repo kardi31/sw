@@ -5,10 +5,10 @@ class Default_IndexController extends MF_Controller_Action
     
     public function indexAction()
     {
-           $videoService = $this->_service->getService('Gallery_Service_Video');
-    $promotedVideo = $videoService->getPromotedVideo();
-    
-        $this->view->assign('promotedVideo', $promotedVideo);
+//           $videoService = $this->_service->getService('Gallery_Service_Video');
+//    $promotedVideo = $videoService->getPromotedVideo();
+//    
+//        $this->view->assign('promotedVideo', $promotedVideo);
       
         $this->_helper->actionStack('layout');
         $metatagService = $this->_service->getService('Default_Service_Metatag');
@@ -16,29 +16,41 @@ class Default_IndexController extends MF_Controller_Action
         $newsService = $this->_service->getService('News_Service_News');
         $photoService = $this->_service->getService('Media_Service_Photo');
 
-        $query = $newsService->getNewsPaginationQuery($this->view->language);
-        
-        $adapter = new MF_Paginator_Adapter_Doctrine($query, Doctrine_Core::HYDRATE_RECORD);
-        $paginator = new Zend_Paginator($adapter);
-        $paginator->setItemCountPerPage(10);
-        $page = $this->_request->getParam('strona', 1);
-        $paginator->setCurrentPageNumber($page);
+        // 1 - seniorzy
+        $lastNews = $newsService->getLastCategoryNews(1,3);
+        $this->view->assign('lastNews', $lastNews);
         
         $leagueService = $this->_service->getService('League_Service_League');
         $matchService = $this->_service->getService('League_Service_Match');
-        $leagues = $leagueService->getActiveLeaguesWithTable();
-	$leagueIds = $leagueService->getActiveLeagueIds();
-	$nextMatches = $matchService->getNextMatches($leagueIds);
-	$prevMatches = $matchService->getPrevMatches($leagueIds);
+        $league = $leagueService->getActiveLeague(1);
+	$myNextMatches = $matchService->getMyNextMatches(1);
+	$lastResult = $matchService->getLastResult(1,Doctrine_Core::HYDRATE_ARRAY);
+//	var_dump($nextMatches);exit;
+//        $this->view->assign('prevMatches', $prevMatches);
+        $this->view->assign('myNextMatches', $myNextMatches);
+        $this->view->assign('lastResult', $lastResult);
+        $this->view->assign('league', $league);
 	
-        $this->view->assign('prevMatches', $prevMatches);
-        $this->view->assign('nextMatches', $nextMatches);
-        $this->view->assign('leagues', $leagues);
-	
-	
-          $eventService = $this->_service->getService('District_Service_Event');
-        $nextEvents = $eventService->getNextEvents();
-        $this->view->assign('nextEvents',$nextEvents);
+        $teamService = $this->_service->getService('League_Service_Team');
+	$myPlayers = $teamService->getMyTeamPlayers(1,Doctrine_Core::HYDRATE_ARRAY);
+        
+        $this->view->assign('myPlayers',$myPlayers);
+        
+         $galleryService = $this->_service->getService('Gallery_Service_Gallery');
+
+	$lastGalleries = $galleryService->getLastGalleries(3,Doctrine_Core::HYDRATE_ARRAY);
+
+        
+        $this->view->assign('lastGalleries', $lastGalleries);
+        
+	$category = 'seniorzy';
+        $this->view->assign('category',$category);
+//        
+        $this->_helper->actionStack('layout', 'index', 'default');
+        
+//          $eventService = $this->_service->getService('District_Service_Event');
+//        $nextEvents = $eventService->getNextEvents();
+//        $this->view->assign('nextEvents',$nextEvents);
       
         
         if(!$homepage = $pageService->getI18nPage('homepage', 'type', $this->view->language, Doctrine_Core::HYDRATE_RECORD)) {
@@ -52,17 +64,23 @@ class Default_IndexController extends MF_Controller_Action
         
         $this->view->assign('homepage', $homepage);
         
-        
-        $this->view->paginator = $paginator;
         $this->view->modelPhoto = $photoService;
         
-//        var_dump(isset($this->view->nextEvents));exit;
     }
+        
+        
+        
+//        var_dump(isset($this->view->nextEvents));exit;
+    
 
     public function layoutAction()
     {
         
        
+        $bannerService = $this->_service->getService('Banner_Service_Banner');
+        
+        $banners = $bannerService->getAllActiveBanners();
+        $this->view->assign('banners', $banners);
         $this->_helper->actionStack('slider');
         $this->_helper->actionStack('menu');
         $this->_helper->viewRenderer->setNoRender(true);

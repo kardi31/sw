@@ -20,5 +20,23 @@ class League_Model_Doctrine_Team extends League_Model_Doctrine_BaseTeam
              'local' => 'id',
              'foreign' => 'team2'));
         
+        $this->hasOne('Media_Model_Doctrine_Photo as Logo', array(
+             'local' => 'logo_id',
+             'foreign' => 'id'));
     }
+    
+    public function getId(){
+        return $this->_get('id');
+    }
+    
+    public static $photoDimensions = array(
+        '126x126' => 'Photo in admin panel', // admin
+        '127x127' => 'Logo klubu'
+    );
+
+    
+    public static function getPhotoDimensions() {
+        return self::$photoDimensions;
+    } 
+    
 }

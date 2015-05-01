@@ -153,6 +153,13 @@ class MF_Text
 	return $polishMonths[$timeFormat-1];
     }
     
+    public static function polishShortDayOfWeek($date){
+	$timeFormat = self::timeFormat($date,'N');
+	$polishMonths = array('Poniedziałek','Wtorek','Środa','Czwartek','Piątek','Sobota','Niedziela');
+	
+	return $polishMonths[$timeFormat-1];
+    }
+    
     public static function getPhotoPath($photo,$dimensions=null){
 	$photoPath = "/media/photos/".$photo['offset']."/";
 	if(offset)

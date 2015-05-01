@@ -12,5 +12,26 @@
  */
 class League_Model_Doctrine_Player extends League_Model_Doctrine_BasePlayer
 {
+    public function setUp()
+    {
+        parent::setUp();
+        
+        $this->hasOne('Media_Model_Doctrine_Photo as Photo', array(
+             'local' => 'photo_id',
+             'foreign' => 'id'));
+    }
+    
+    public function getId(){
+        return $this->_get('id');
+    }
+    
+    public static $photoDimensions = array(
+        '126x126' => 'Photo in admin panel', // admin
+        '157x200' => 'Zdjęcie zawodnika'
+    );
 
+    
+    public static function getPhotoDimensions() {
+        return self::$photoDimensions;
+    } 
 }

@@ -2137,11 +2137,18 @@ article.blog-item {
   right: 0px;
   top: 40%;
 }
-
+#partner{
+    margin-top:20px;
+}
+.slider3{
+      overflow: hidden;
+  position: relative;
+}
 
   hr.bar{
-      border:10px solid #122737;
+      border:10px solid #0C2F99;
       margin:0px;
+      margin-top:20px;
       padding:0px;
   }
   .white{
@@ -2149,7 +2156,7 @@ article.blog-item {
   }
   
   .dark-purple{
-      background:#122737;
+      /*background:#122737;*/
   }
   
 

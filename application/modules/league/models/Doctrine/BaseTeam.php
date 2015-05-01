@@ -10,6 +10,7 @@
  * @property string $slug
  * @property integer $league_id
  * @property boolean $my_team
+ * @property integer $logo_id
  * @property League_Model_Doctrine_League $League
  * @property Doctrine_Collection $Matches1
  * @property League_Model_Doctrine_Tabela $Tabela
@@ -46,6 +47,10 @@ abstract class League_Model_Doctrine_BaseTeam extends Doctrine_Record
         $this->hasColumn('my_team', 'boolean', null, array(
              'type' => 'boolean',
              'default' => 0,
+             ));
+        $this->hasColumn('logo_id', 'integer', 4, array(
+             'type' => 'integer',
+             'length' => '4',
              ));
 
         $this->option('type', 'MyISAM');

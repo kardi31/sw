@@ -1317,7 +1317,6 @@ abstract class elFinderVolumeDriver {
 		if ($this->commandDisabled('upload')) {
 			return $this->setError(elFinder::ERROR_PERM_DENIED);
 		}
-		
 		if (($dir = $this->dir($dst)) == false) {
 			return $this->setError(elFinder::ERROR_TRGDIR_NOT_FOUND, '#'.$dst);
 		}
@@ -1363,7 +1362,6 @@ abstract class elFinderVolumeDriver {
 		
 		$file = $this->stat($test);
 		$this->clearcache();
-		
 		if ($file) { // file exists
 			if ($this->options['uploadOverwrite']) {
 				if (!$file['write']) {
@@ -2014,7 +2012,6 @@ abstract class elFinderVolumeDriver {
 		} else {
 			unset($stat['hidden']);
 		}
-		
 		if ($stat['read'] && empty($stat['hidden'])) {
 			
 			if ($stat['mime'] == 'directory') {

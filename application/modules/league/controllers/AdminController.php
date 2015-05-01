@@ -54,10 +54,12 @@ class League_AdminController extends MF_Controller_Action {
     
     public function addLeagueAction() {
         $leagueService = $this->_service->getService('League_Service_League');
+        $groupService = $this->_service->getService('League_Service_Group');
         
         
         $form = $leagueService->getLeagueForm();
-         
+        $form->getElement('group_id')->setMultiOptions($groupService->getGroupsForForm()); 
+        
         if($this->getRequest()->isPost()) {
             if($form->isValid($this->getRequest()->getParams())) {
                 try {
@@ -82,13 +84,15 @@ class League_AdminController extends MF_Controller_Action {
     
     public function editLeagueAction() {
         $leagueService = $this->_service->getService('League_Service_League');
+        $groupService = $this->_service->getService('League_Service_Group');
         
         if(!$league = $leagueService->getLeague((int) $this->getRequest()->getParam('id'))) {
             throw new Zend_Controller_Action_Exception('League not found');
         }
         
-        
         $form = $leagueService->getLeagueForm($league);
+        $form->getElement('group_id')->setMultiOptions($groupService->getGroupsForForm()); 
+        $form->getElement('group_id')->setValue($league->group_id);
          
         if($this->getRequest()->isPost()) {
             if($form->isValid($this->getRequest()->getParams())) {
@@ -603,5 +607,58 @@ class League_AdminController extends MF_Controller_Action {
         $this->_helper->redirector->gotoUrl($_SERVER['HTTP_REFERER']);
                
     } 
+    
+    
+    public function editPlayerAction() {
+        $teamService = $this->_service->getService('League_Service_Team');
+        $playerService = $this->_service->getService('League_Service_Player');
+        $leagueService = $this->_service->getService('League_Service_League');
+        
+	if(!$player = $playerService->getPlayer((int) $this->getRequest()->getParam('id'))) {
+            throw new Zend_Controller_Action_Exception('Player not found');
+        }
+        
+        
+        $form = $playerService->getPlayerForm($player);
+        
+         
+        if($this->getRequest()->isPost()) {
+            if($form->isValid($this->getRequest()->getParams())) {
+                try {
+                    $this->_service->get('doctrine')->getCurrentConnection()->beginTransaction();
+                    
+                    $values = $_POST;
+
+		    $team['name'] = $values['name'];
+		    
+		    $playerCounter = count($team['Players']);
+		    foreach($values['new_player1'] as $value):
+			if(!strlen($value))
+			    break;
+			
+			$fullname = explode(' ',$value);
+			$team['Players'][$playerCounter]['last_name'] = $fullname[0];
+			$team['Players'][$playerCounter]['first_name'] = $fullname[1];
+			$team['Players'][$playerCounter]['team_id'] = $team['id'];
+			$playerCounter++;
+		    endforeach;
+		    $team->save();
+		    
+                    $this->_service->get('doctrine')->getCurrentConnection()->commit();
+                
+                    $this->_helper->redirector->gotoUrl($this->view->adminUrl('list-team', 'league',array('league_id' => $league_id)));
+                } catch(Exception $e) {
+		    var_dump($e->getMessage());exit;
+                    $this->_service->get('doctrine')->getCurrentConnection()->rollback();
+                    $this->_service->get('log')->log($e->getMessage(), 4);
+                }
+            }
+        }
+        
+        $this->view->assign('player', $player);
+        $this->view->assign('league_id', $league_id);
+        $this->view->assign('form', $form);
+        $this->view->assign('team', $team);
+    }
 }
 

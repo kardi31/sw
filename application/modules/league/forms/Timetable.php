@@ -14,7 +14,8 @@ class League_Form_Timetable extends Admin_Form
         for($j=1;$j<=5;$j++):
             ${'time'.$j} = $this->createElement('text', 'time'.$j);
             ${'time'.$j}->setDecorators(self::$textDecorators);
-            ${'time'.$j}->setAttrib('class', 'span8 timepicker-default');
+            ${'time'.$j}->setAttrib('class', 'span8 hrspicker');
+            ${'time'.$j}->setValue('17:00');
             $this->addElement(${'time'.$j});
         endfor;
         

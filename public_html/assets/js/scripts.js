@@ -82,6 +82,7 @@ $(window).load(function() {
     slideWidth: 233,
     minSlides: 2,
     maxSlides: 2,
+    randomStart: true,
 	pager: false,
     slideMargin: 0
   });
@@ -91,6 +92,16 @@ $(document).ready(function(){
     //slideWidth: 156,
     minSlides: 1,
     maxSlides: 4,
+	pager: false,
+    slideMargin: 0
+  });
+  $('.slider3').bxSlider({
+    slideWidth: 233,
+    minSlides: 1,
+    maxSlides: 4,
+    randomStart: true,
+    speed: 1000,
+    auto: true,
 	pager: false,
     slideMargin: 0
   });

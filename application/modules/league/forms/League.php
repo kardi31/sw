@@ -19,6 +19,12 @@ class League_Form_League extends Admin_Form
         $active->setDecorators(self::$checkboxDecorators);
         $active->setAttrib('class', 'span8');
         $active->setValue(1);
+        
+        $group = $this->createElement('select', 'group_id');
+        $group->setLabel('Kategoria');
+        $group->setRequired(true);
+        $group->setDecorators(self::$selectDecorators);
+        $group->setAttrib('class', 'span8');
   
         $submit = $this->createElement('button', 'submit');
         $submit->setLabel('Zapisz');
@@ -30,6 +36,7 @@ class League_Form_League extends Admin_Form
             $id,
             $team,
 	    $active,
+            $group,
             $submit
         ));
     }

@@ -68,6 +68,16 @@ class Gallery_Model_Doctrine_Gallery extends Gallery_Model_Doctrine_BaseGallery
     }
     
     
+    public static $photoDimensions = array(
+        '126x126' => 'Photo in admin panel', // admin
+        '365x300' => 'Strona główna'
+    );
+
+    
+    public static function getPhotoDimensions() {
+        return self::$photoDimensions;
+    } 
+    
     public function setUp() {
         parent::setUp();
         $this->hasOne('Default_Model_Doctrine_Metatag as Metatag', array(

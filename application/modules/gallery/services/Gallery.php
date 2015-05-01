@@ -53,6 +53,17 @@ class Gallery_Service_Gallery extends MF_Service_ServiceAbstract {
         return $q->execute(array(),$hydrationMode);
     }
     
+    public function getLastGalleries($limit,$hydrationMode = Doctrine_Core::HYDRATE_RECORD) {
+        $q = $this->galleryTable->createQuery('g');
+	$q->select('g.*,p.*,gt.*');
+	$q->leftJoin('g.Translation gt');
+	$q->leftJoin('g.Photos p');
+        $q->orderBy('g.id DESC');
+        $q->limit($limit);
+        return $q->execute(array(),$hydrationMode);
+    }
+    
+    
     public function getGallerySelectOptions($language, $prependEmptyValue = false, $idPrefix = '') {
         $gallerys = $this->getAllGallerys();
         $result = array();

@@ -33,6 +33,18 @@ class League_Service_Team extends MF_Service_ServiceAbstract {
         return $wynik['Players'];
     }
     
+    public function getMyTeamPlayers($group_id, $hydrationMode = Doctrine_Core::HYDRATE_RECORD) {    
+        $q = $this->teamTable->createQuery('t');
+        $q->innerJoin('t.League l');
+        $q->leftJoin('t.Players p');
+        $q->leftJoin('p.Photo lo');
+        $q->addWhere('l.group_id = ?',$group_id);
+        $q->addWhere('t.my_team = 1');
+        $q->orderBy("FIELD(position,'Bramkarz','Obrońca','Pomocnik','Napastnik')");
+        $wynik = $q->fetchOne(array(),$hydrationMode);
+        return $wynik['Players'];
+    }
+    
     public function getTeamsTimetable($league_id,$hydrationMode = Doctrine_Core::HYDRATE_ARRAY) {  
         $q = $this->teamTable->createQuery('t');
         $q->addWhere('t.league_id = ?',$league_id);

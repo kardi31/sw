@@ -19,10 +19,12 @@ class Banner_Service_Banner extends MF_Service_ServiceAbstract {
    public function getAllBanners(){
        return $this->bannerTable->findAll();
    }
-   public function getAllActiveBanners(){
+   public function getAllActiveBanners($hydrationMode = Doctrine_Core::HYDRATE_RECORD){
        $q = $this->bannerTable->createQuery('p');
        $q->addWhere('p.status = 1');
-       return $q->execute(array(),Doctrine_Core::HYDRATE_RECORD);
+       $q->addWhere('p.date_from <= NOW()');
+       $q->addWhere('p.date_to > NOW()');
+       return $q->execute(array(),$hydrationMode);
    }
    
    public function getPositionBanners($position,$hydrationMode = Doctrine_Core::HYDRATE_RECORD){

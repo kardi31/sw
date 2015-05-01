@@ -87,7 +87,6 @@ class elFinderConnector {
 			}
 			$args[$name] = $arg;
 		}
-		
 		$args['debug'] = isset($src['debug']) ? !!$src['debug'] : false;
 		
 		$this->output($this->elFinder->exec($cmd, $args));

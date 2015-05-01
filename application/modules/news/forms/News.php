@@ -14,10 +14,10 @@ class News_Form_News extends Admin_Form {
         $id = $this->createElement('hidden', 'id');
         $id->setDecorators(array('ViewHelper'));
         
-//        $categoryId = $this->createElement('select', 'category_id');
-//        $categoryId->setLabel('Category');
-//        $categoryId->setRequired();
-//        $categoryId->setDecorators(self::$selectDecorators);
+        $categoryId = $this->createElement('select', 'category_id');
+        $categoryId->setLabel('Category');
+        $categoryId->setRequired();
+        $categoryId->setDecorators(self::$selectDecorators);
         
 //        $groupId = $this->createElement('select', 'group_id');
 //        $groupId->setLabel('Group');
@@ -104,7 +104,7 @@ class News_Form_News extends Admin_Form {
 
         $this->setElements(array(
             $id,
-           // $categoryId,
+            $categoryId,
             $publish,
          //   $tagId,
          //   $groupId,

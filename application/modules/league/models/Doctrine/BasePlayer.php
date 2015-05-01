@@ -8,7 +8,9 @@
  * @property integer $id
  * @property string $first_name
  * @property string $last_name
+ * @property string $position
  * @property integer $team_id
+ * @property integer $photo_id
  * @property League_Model_Doctrine_Team $Team
  * @property Doctrine_Collection $Bookings
  * @property Doctrine_Collection $Shooters
@@ -37,7 +39,15 @@ abstract class League_Model_Doctrine_BasePlayer extends Doctrine_Record
              'type' => 'string',
              'length' => '255',
              ));
+        $this->hasColumn('position', 'string', 255, array(
+             'type' => 'string',
+             'length' => '255',
+             ));
         $this->hasColumn('team_id', 'integer', 4, array(
+             'type' => 'integer',
+             'length' => '4',
+             ));
+        $this->hasColumn('photo_id', 'integer', 4, array(
              'type' => 'integer',
              'length' => '4',
              ));

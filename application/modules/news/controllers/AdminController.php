@@ -132,6 +132,7 @@ class News_AdminController extends MF_Controller_Action {
     
     public function editNewsAction() {
         $newsService = $this->_service->getService('News_Service_News');
+        $categoryService = $this->_service->getService('News_Service_Category');
         $i18nService = $this->_service->getService('Default_Service_I18n');
         $metatagService = $this->_service->getService('Default_Service_Metatag');
         $photoService = $this->_service->getService('Media_Service_Photo');
@@ -146,8 +147,8 @@ class News_AdminController extends MF_Controller_Action {
         $adminLanguage = $i18nService->getAdminLanguage();
         
         $form = $newsService->getNewsForm($news);
-//        $form->getElement('category_id')->addMultiOptions($categoryService->prependCategoryOptions());
-//        $form->getElement('category_id')->setValue($news['category_id']);
+        $form->getElement('category_id')->addMultiOptions($categoryService->prependCategoryOptions());
+        $form->getElement('category_id')->setValue($news['category_id']);
 //        $form->getElement('group_id')->addMultiOptions($groupService->prependGroupOptions());
 //        $form->getElement('group_id')->setValue($news['group_id']);
 //        $form->getElement('tag_id')->addMultiOptions($tagService->prependTagOptions());

@@ -38,7 +38,9 @@ class League_Service_League extends MF_Service_ServiceAbstract {
             $orderStatus = $this->leagueTable->getRecord();
         }
          
+        
         $orderStatus->fromArray($values);
+        $orderStatus->slug = MF_Text::createUniqueTableSlug('League_Model_Doctrine_League',$values['name'],$values['id']);
         $orderStatus->save();
         
         return $orderStatus;
@@ -51,6 +53,15 @@ class League_Service_League extends MF_Service_ServiceAbstract {
     public function getAllLeague($hydrationMode = Doctrine_Core::HYDRATE_RECORD) {
         $q = $this->leagueTable->getLeagueQuery();
         return $q->execute(array(), $hydrationMode);
+    }
+    
+    public function getActiveLeague($group_id,$hydrationMode = Doctrine_Core::HYDRATE_RECORD) {
+        $q = $this->leagueTable->createQuery('l');
+        $q->leftJoin('l.Tabela t');
+        $q->addWhere('l.group_id = ?',$group_id);
+        $q->addWhere('l.active = 1');
+        $q->orderBy('l.id DESC,t.points DESC,(t.goals_scored-t.goals_lost) DESC');
+        return $q->fetchOne(array(), $hydrationMode);
     }
     
     public function getActiveLeagues($hydrationMode = Doctrine_Core::HYDRATE_RECORD) {

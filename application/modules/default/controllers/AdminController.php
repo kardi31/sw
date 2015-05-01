@@ -223,5 +223,77 @@ class Default_AdminController extends MF_Controller_Action {
         }
           $this->view->assign('form',$form);
     }
+    
+    public function editPhotoAction(){
+        $photoService = $this->_service->getService('Media_Service_Photo');
+        $i18nService = $this->_service->getService('Default_Service_I18n');
+        
+        $adminLanguage = $i18nService->getAdminLanguage();
+        
+        
+        if(!$photo = $photoService->getPhoto((int) $this->getRequest()->getParam('id'))) {
+            throw new Zend_Controller_Action_Exception('Photo photo not found');
+        }
+
+        $form = $photoService->getPhotoForm($photo);
+        
+        $type = $this->getRequest()->getParam('type');
+        
+        $elementId = $this->getRequest()->getParam('element-id');
+        
+        switch($type):
+            case 'player':
+                $class = 'League_Model_Doctrine_Player';
+                $backUrl = $this->view->adminUrl('edit-player', 'league', array('id' => $elementId));
+                break;
+            case 'gallery':
+                $class = 'Gallery_Model_Doctrine_Gallery';
+                $backUrl = $this->view->adminUrl('edit-gallery', 'gallery', array('id' => $elementId));
+                break;
+        endswitch;
+        
+        $dimensions = $class::getPhotoDimensions();
+        
+        
+        
+//        $photosDir = $photoService->photosDir;
+//        $offsetDir = realpath($photosDir . DIRECTORY_SEPARATOR . $photo->getOffset());
+//        if(strlen($photo->getFilename()) > 0 && file_exists($offsetDir . DIRECTORY_SEPARATOR . $photo->getFilename())) {
+//            list($width, $height) = getimagesize($offsetDir . DIRECTORY_SEPARATOR . $photo->getFilename());
+//            $this->view->assign('imgDimensions', array('width' => $width, 'height' => $height));
+//        }
+//        
+//        if($this->getRequest()->isPost()) {
+//            if($form->isValid($this->getRequest()->getParams())) {
+//                try {
+//                    $this->_service->get('doctrine')->getCurrentConnection()->beginTransaction();
+//                    
+//                    $values = $form->getValues();
+//                    $photo = $photoService->saveFromArray($values);
+//
+//                    $this->_service->get('doctrine')->getCurrentConnection()->commit();
+//                    
+//                    if($this->getRequest()->getParam('saveOnly') == '1')
+//                        $this->_helper->redirector->gotoUrl($this->view->adminUrl('edit-product-photo', 'product', array('id' => $photo->getId(), 'product-id' => $product->getId())));
+//                    
+//                    $this->_helper->redirector->gotoUrl($this->view->adminUrl('edit-product', 'product', array('id' => $product->getId())));
+//                } catch(Exception $e) {
+//                    $this->_service->get('doctrine')->getCurrentConnection()->rollback();
+//                    $this->_service->get('Logger')->log($e->getMessage(), 4);
+//                }
+//            }
+//        }
+//          
+//        $this->view->admincontainer->findOneBy('id', 'cropproductphoto')->setActive();
+//        $this->view->admincontainer->findOneBy('id', 'editphotoproduct')->setLabel($product->Translation[$adminLanguage->getId()]->name);
+//        $this->view->admincontainer->findOneBy('id', 'editphotoproduct')->setParam('id', $product->getId());
+//        $this->view->adminTitle = $this->view->translate($this->view->admincontainer->findOneBy('id', 'cropproductphoto')->getLabel());
+        
+        $this->view->assign('dimensions', $dimensions);
+        $this->view->assign('elementId', $elementId);
+        $this->view->assign('backUrl', $backUrl);
+        $this->view->assign('photo', $photo);
+        $this->view->assign('form', $form);
+    }
 }
 

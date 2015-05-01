@@ -62,6 +62,39 @@ class League_Service_Match extends MF_Service_ServiceAbstract {
 	return $result->fetchAll(Doctrine_Core::FETCH_ASSOC);
     }
     
+    public function getMyNextMatches($group_id){
+	
+	$q = Doctrine_Manager::getInstance()->getCurrentConnection();
+	$result = $q->execute("select m1.*,t1.name as team1_name,t2.name as team2_name from league_match m1"
+		. " LEFT JOIN league_team t1 on m1.team1 = t1.id "
+		. " LEFT JOIN league_team t2 on m1.team2 = t2.id "
+                . " INNER JOIN league_league l on m1.league_id = l.id"
+                . " where m1.match_date > NOW()"
+		. " and l.group_id like $group_id"
+                . " and l.active = 1"
+		. " ORDER BY m1.match_date");
+	return $result->fetchAll(Doctrine_Core::FETCH_ASSOC);
+    }
+    
+     public function getLastResult($group_id,$hydrationMode = Doctrine_Core::HYDRATE_RECORD)
+    {
+        $q = $this->matchTable->createQuery('m');
+        $q
+                ->innerJoin('m.Team1 t1')
+                ->innerJoin('m.Team2 t2')
+                ->leftJoin('t1.Logo l1')
+                ->leftJoin('t2.Logo l2')
+                ->leftJoin('m.League l')
+                ->addSelect('m.*,l.*,t1.name,t2.name,l1.*,l2.*')
+                ->addWhere('l.group_id = ?',$group_id)
+                ->addWhere('t1.my_team = 1 or t2.my_team = 1')
+                ->addWhere('m.played = 1')
+             ->orderBy('m.match_date DESC')
+                ->limit(1);
+    return $q->fetchOne(array(),$hydrationMode);
+
+    }
+    
     public function getPrevClosestDateMatches($leagueId){
 	
 	$q = Doctrine_Manager::getInstance()->getCurrentConnection();

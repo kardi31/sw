@@ -17,6 +17,11 @@ class League_Service_Player extends MF_Service_ServiceAbstract {
     public function getPlayerType($id, $field = 'id', $hydrationMode = Doctrine_Core::HYDRATE_RECORD) {    
         return $this->playerTable->findOneBy($field, $id, $hydrationMode);
     }
+    
+    public function getPlayer($id, $field = 'id', $hydrationMode = Doctrine_Core::HYDRATE_RECORD) {    
+        return $this->playerTable->findOneBy($field, $id, $hydrationMode);
+    }
+    
     public function getPlayerTypes() {    
         return $this->playerTable->findAll();
     }
@@ -41,6 +46,14 @@ class League_Service_Player extends MF_Service_ServiceAbstract {
         endforeach;
         
         return $options;
+    }
+    
+    public function getPlayerForm(League_Model_Doctrine_Player $player = null) {
+        $form = new League_Form_Player();
+        if(null != $player) { 
+            $form->populate($player->toArray());
+        }
+        return $form;
     }
     
     public function getPlayerTypeForm(Order_Model_Doctrine_PlayerType $player = null) {

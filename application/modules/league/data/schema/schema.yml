@@ -18,6 +18,8 @@ Team:
     my_team:
       type: boolean
       default: 0
+    logo_id:
+      type: integer(4)
 League:
   tableName: league_league
   columns:
@@ -32,6 +34,8 @@ League:
     active:
       type: boolean
       default: 1
+    group_id:
+      type: integer(4)
   relations:
     Team:
       local: id
@@ -145,7 +149,11 @@ Player:
       type: string(255) 
     last_name:
       type: string(255)
+    position:
+      type: string(255)
     team_id:
+      type: integer(4)
+    photo_id:
       type: integer(4)
   relations:
     Team:
@@ -210,3 +218,14 @@ Shooter:
       type: many
       alias: Match
       foreignAlias: Shooters
+Group:
+  tableName: league_group
+  columns:
+    id: 
+      primary: true
+      autoincrement: true
+      type: integer(4)
+    slug:
+      type: string(255)
+    name:
+      type: string(255)

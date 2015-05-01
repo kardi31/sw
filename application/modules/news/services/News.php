@@ -229,7 +229,7 @@ class News_Service_News extends MF_Service_ServiceAbstract{
         return $q->execute(array(), $hydrationMode);
     }
     
-      public function getLastNews($limit = 4, $hydrationMode = Doctrine_Core::HYDRATE_RECORD){
+    public function getLastNews($limit = 4, $hydrationMode = Doctrine_Core::HYDRATE_RECORD){
         $q = $this->newsTable->getLastNewsQuery();
         $q->leftJoin('n.VideoRoot v');
         $q->addSelect('v.*');

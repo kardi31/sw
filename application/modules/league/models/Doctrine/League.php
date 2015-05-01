@@ -12,5 +12,5 @@
  */
 class League_Model_Doctrine_League extends League_Model_Doctrine_BaseLeague
 {
-
+    
 }

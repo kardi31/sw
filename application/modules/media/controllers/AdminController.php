@@ -73,7 +73,6 @@ class Media_AdminController extends MF_Controller_Action
         
         $mediaDir = $this->getFrontController()->getParam('bootstrap')->getOption('mediaDir');
         $elfinderUrl = $this->getFrontController()->getParam('bootstrap')->getOption('elfinderUrl');
-
         $opts = array(
             // 'debug' => true,
             'roots' => array(
@@ -85,7 +84,6 @@ class Media_AdminController extends MF_Controller_Action
                 )
             )
         );
-
         // run elFinder
         $connector = new elFinderConnector(new elFinder($opts));
         $connector->run();
