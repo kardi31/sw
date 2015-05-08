@@ -20,6 +20,8 @@ Team:
       default: 0
     logo_id:
       type: integer(4)
+    teamphoto_id:
+      type: integer(4)
 League:
   tableName: league_league
   columns:
@@ -138,6 +140,33 @@ Tabela:
       type: one
       alias: League
       foreignAlias: Tabela
+Coach:
+  tableName: league_coach
+  columns:
+    id:
+      primary: true
+      autoincrement: true
+      type: integer(4)
+    first_name:
+      type: string(255) 
+    last_name:
+      type: string(255)
+    position:
+      type: string(255)
+    description:
+      type: text
+    team_id:
+      type: integer(4)
+    photo_id:
+      type: integer(4)
+  relations:
+    Team:
+      local: team_id
+      foreign: id
+      foreignType: one
+      type: one
+      alias: Team
+      foreignAlias: Coach
 Player:
   tableName: league_player
   columns:
@@ -163,6 +192,19 @@ Player:
       type: one
       alias: Team
       foreignAlias: Players
+Board:
+  tableName: league_board
+  columns:
+    id:
+      primary: true
+      autoincrement: true
+      type: integer(4)
+    first_name:
+      type: string(255) 
+    last_name:
+      type: string(255)
+    position:
+      type: string(255)
 Booking:
   tableName: league_booking
   columns:

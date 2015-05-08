@@ -215,14 +215,47 @@ $(document).ready(function() {
     </div>
 
     <div class="page-header">
-                         <h4><?php echo $this->translate('Gallery View') ?></h4>
-                    </div>                  
-                      <div id="itemContainer">           
-                        <button href="#" id="add-photo" style="width: 120px;"><?php echo $this->translate('Add photo') ?></button>
-                        <ul id="main_photo_container" class="galleryView center">           
-                                    <?php echo $this->partial('admin/page-photos.phtml', 'page', array('photos' => $this->page->get('PhotoRoot')->getNode()->getChildren(), 'page' => $this->page)) ?>
-                        </ul>
-                      </div>
+        <h4><?php 
+        switch($this->page->type):
+            case 'about-us':
+                echo $this->translate('Prezes klubu');
+                break;
+            default:
+                echo 'Zdjęcie główne';
+        endswitch;
+                
+                ?></h4>
+   </div>  
+   <div id="itemCon">
+       <ul id="main_photo_con" class="galleryView center">
+           <li class="pull-left">
+               <?php if($this->page->get('PhotoRoot')->getOffset()): ?>
+               <a id="main_photo" href="/media/photos/<?php echo $this->page->get('PhotoRoot')->getOffset() ?>/<?php echo $this->page->get('PhotoRoot')->getFilename() ?>" rel="prettyPhoto" title="<?php echo $this->page->get('PhotoRoot')->getTitle() ?>">
+                   <img src="/media/photos/<?php echo $this->page->get('PhotoRoot')->getOffset() ?>/126x126/<?php echo $this->page->get('PhotoRoot')->getFilename() ?>" data-original="/media/photos/<?php echo $this->page->get('PhotoRoot')->getOffset() ?>/<?php echo $this->page->get('PhotoRoot')->getFilename() ?>" alt="<?php echo $this->page->get('PhotoRoot')->getTitle() ?>">
+               </a>
+               <?php else: ?>
+               <a id="main_photo" href="/images/gallery/preload.png" title="<?php echo $this->translate('No photo') ?>">
+                   <img src="/images/gallery/preload.png" data-original="/images/gallery/preload.png" alt="<?php echo $this->translate('No photo') ?>">
+               </a>
+               <?php endif; ?>
+               <div class="actionBtn">
+                   <a href="<?php echo $this->adminUrl('edit-photo', 'default', array('type' => 'page-main','element-id' => $this->page->getId(),'id' => $this->page->get('PhotoRoot')->getId())) ?>" class="edit"><span class="icon16 icomoon-icon-pencil-2 white"></span></a>
+                   <a href="#" class="add"><span class="icon16 iconic-icon-cursor white"></span></a>
+                   <a href="#" class="delete"><span class="icon16 icomoon-icon-cancel-4 white"></span></a>
+               </div>
+           </li>
+       </ul>
+   </div> 
+    
+    <div class="page-header">
+        <h4><?php echo $this->translate('Gallery View') ?></h4>
+   </div>                  
+     <div id="itemContainer">           
+       <button href="#" id="add-photo" style="width: 120px;"><?php echo $this->translate('Add photo') ?></button>
+       <ul id="main_photo_container" class="galleryView center">           
+            <?php echo $this->partial('admin/page-photos.phtml', 'page', array('type' => 'about-us','photos' => $this->page->get('PhotoRoot')->getNode()->getChildren(), 'page' => $this->page)) ?>
+       </ul>
+     </div>
 
 </div>
 

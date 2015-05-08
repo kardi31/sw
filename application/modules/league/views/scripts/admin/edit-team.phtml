@@ -137,7 +137,7 @@ $(document).ready(function() {
 		    <?php endfor; ?>
                     
                     <div class="page-header">
-                         <h4><?php echo $this->translate('Main photo') ?></h4>
+                         <h4><?php echo $this->translate('Logo klubu') ?></h4>
                     </div>  
                     <div id="itemCon">
                         <ul id="main_photo_con" class="galleryView center">
@@ -152,7 +152,30 @@ $(document).ready(function() {
                                 </a>
                                 <?php endif; ?>
                                 <div class="actionBtn">
-                                    <a href="<?php echo $this->adminUrl('edit-photo', 'default', array('type' => 'Team_Model_Doctrine_Team','id' => $this->team->get('Logo')->getId())) ?>" class="edit"><span class="icon16 icomoon-icon-pencil-2 white"></span></a>
+                                    <a href="<?php echo $this->adminUrl('edit-photo', 'default', array('type' => 'team','id' => $this->team->get('Logo')->getId())) ?>" class="edit"><span class="icon16 icomoon-icon-pencil-2 white"></span></a>
+                                    <a href="#" class="add"><span class="icon16 iconic-icon-cursor white"></span></a>
+                                    <a href="#" class="delete"><span class="icon16 icomoon-icon-cancel-4 white"></span></a>
+                                </div>
+                            </li>
+                        </ul>
+                    </div> 
+                    <div class="page-header">
+                         <h4><?php echo $this->translate('Zdjęcie drużyny') ?></h4>
+                    </div>  
+                    <div id="itemCon">
+                        <ul id="main_photo_con" class="galleryView center">
+                            <li class="pull-left">
+                                <?php if($this->team->get('TeamPhoto')->getOffset()): ?>
+                                <a id="main_photo" href="/media/photos/<?php echo $this->team->get('TeamPhoto')->getOffset() ?>/<?php echo $this->team->get('TeamPhoto')->getFilename() ?>" rel="prettyPhoto" title="<?php echo $this->team->get('TeamPhoto')->getTitle() ?>">
+                                    <img src="/media/photos/<?php echo $this->team->get('TeamPhoto')->getOffset() ?>/126x126/<?php echo $this->team->get('TeamPhoto')->getFilename() ?>" data-original="/media/photos/<?php echo $this->team->get('TeamPhoto')->getOffset() ?>/<?php echo $this->team->get('TeamPhoto')->getFilename() ?>" alt="<?php echo $this->team->get('TeamPhoto')->getTitle() ?>">
+                                </a>
+                                <?php else: ?>
+                                <a id="main_photo" href="/images/gallery/preload.png" title="<?php echo $this->translate('No photo') ?>">
+                                    <img src="/images/gallery/preload.png" data-original="/images/gallery/preload.png" alt="<?php echo $this->translate('No photo') ?>">
+                                </a>
+                                <?php endif; ?>
+                                <div class="actionBtn">
+                                    <a href="<?php echo $this->adminUrl('edit-photo', 'default', array('type' => 'team-photo','id' => $this->team->get('TeamPhoto')->getId())) ?>" class="edit"><span class="icon16 icomoon-icon-pencil-2 white"></span></a>
                                     <a href="#" class="add"><span class="icon16 iconic-icon-cursor white"></span></a>
                                     <a href="#" class="delete"><span class="icon16 icomoon-icon-cancel-4 white"></span></a>
                                 </div>

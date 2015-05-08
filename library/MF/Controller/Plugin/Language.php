@@ -12,7 +12,6 @@ class MF_Controller_Plugin_Language extends Zend_Controller_Plugin_Abstract
     public function routeStartup(Zend_Controller_Request_Abstract $request)
     {
         $translator = Zend_Controller_Router_Route::getDefaultTranslator();
-        
         $uriParts = explode('/', $_SERVER['REQUEST_URI']);
         $this->lang = (Zend_Locale::isLocale($uriParts[1])) ? $uriParts[1] : null;
         

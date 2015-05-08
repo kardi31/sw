@@ -23,6 +23,10 @@ class League_Model_Doctrine_Team extends League_Model_Doctrine_BaseTeam
         $this->hasOne('Media_Model_Doctrine_Photo as Logo', array(
              'local' => 'logo_id',
              'foreign' => 'id'));
+        
+        $this->hasOne('Media_Model_Doctrine_Photo as TeamPhoto', array(
+             'local' => 'teamphoto_id',
+             'foreign' => 'id'));
     }
     
     public function getId(){
@@ -33,10 +37,18 @@ class League_Model_Doctrine_Team extends League_Model_Doctrine_BaseTeam
         '126x126' => 'Photo in admin panel', // admin
         '127x127' => 'Logo klubu'
     );
-
     
+    public static $teamPhotoDimensions = array(
+        '126x126' => 'Photo in admin panel', // admin
+        '940x511' => 'Zdjęcie klubowe'
+    );
+
     public static function getPhotoDimensions() {
         return self::$photoDimensions;
+    } 
+    
+    public static function getTeamPhotoDimensions() {
+        return self::$teamPhotoDimensions;
     } 
     
 }

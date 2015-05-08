@@ -1,0 +1,94 @@
+	<!-- Breadcrumb and title -->
+	<section id="bc-t" style="background:#122737">
+		<div class="container">
+		<ul class="breadcrumb">
+			<li><a href="#">Homepage</a></li><li><span class="sep">   →   </span></li><li><a href="#">Team</a></li>
+		</ul>
+		
+		<h1 class="blog-title">Team</h1>
+		</div>
+	</section>
+    <!-- Content Section. If need sidebars use the tag: <aside>. If articles use tag: <article> -->
+    <section id="club">
+		<div class="container">
+			<!-- POST -->
+			<article class="teamd">
+				<div class="col-6">
+					<div class="tpp">
+                                            <?php
+                                                if($this->coach['Photo']&&strlen($this->coach['Photo']['filename'])){
+                                                    $photoPath = MF_Text::getPhotoPath($this->coach['Photo'],'470x269');
+                                                }
+                                                else{
+                                                    $photoPath = "http://placehold.it/470x269";
+                                                }
+                                                ?>
+                                            <img src="<?php echo $photoPath; ?>" title="<?php echo $this->coach['first_name']." ".$this->coach['last_name']; ?> Świt Krzeszowice" alt="<?php echo $this->coach['first_name']." ".$this->coach['last_name']; ?>"/>
+                                        </div>
+				</div>
+				<div class="col-6">
+					<div class="tpi">
+						<h2><?php echo $this->coach['first_name']." ".$this->coach['last_name']; ?></h2>
+						<span><?php echo $this->coach['position']; ?></span>
+						<p><?php echo $this->coach['description']; ?></p>
+					</div>
+				</div>
+			</article>
+                        <hr class="bar dark-purple" />
+			<div class="team-pl">
+                            <?php foreach($this->myPlayers as $player): 
+                                if($player['Photo']&&strlen($player['Photo']['filename'])){
+                                    $photoPath = MF_Text::getPhotoPath($player['Photo'],'157x200');
+                                }
+                                else{
+                                    $photoPath = "http://placehold.it/157x200";
+                                }
+                                ?>
+                                <div class="col-2">
+                                    <img src="<?php echo $photoPath; ?>" title="<?php echo $player['first_name']." ".$player['last_name']; ?> Świt Krzeszowice" alt="<?php echo $player['first_name']." ".$player['last_name']; ?>"/>
+                                    <div class="player-name">
+                                        <a href="#"><?php echo $player['first_name']." ".$player['last_name']; ?></a>
+                                        <p><?php echo $player['position']; ?></p>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+			</div>
+		</div>
+	</section>
+	<section>
+	<div class="container">
+		<div class="big_crsl">
+			<div class="ftitle"><h2>Season 2013-2014 <span>first team</span></h2></div>
+			<div class="slider2">
+                            <?php 
+                            if($this->team['TeamPhoto']&&strlen($this->team['TeamPhoto']['filename'])){ ?>
+                                <div class="slide"><img src="<?php echo MF_Text::getPhotoPath($this->team['TeamPhoto'],'940x511'); ?>" alt="<?php echo $this->team['name']; ?>" title="<?php echo $this->team['name']; ?>"/></div>
+                                <?php
+                            }
+                            else{ ?>
+                                <div class="slide"><img src="http://placehold.it/940x511" alt="No photo"/></div>
+                                <?php 
+                            }
+                            ?>
+			</div>
+		</div>
+	</div>
+	</section>
+	<section>
+		<div class="container">
+			
+		</div>
+	</section>
+<!--<div id="results" class="content">
+    <?php 
+$this->headTitle('Skład - '.$this->team['name'],'SET');
+?>
+    <h1>Skład drużyny <?php echo $this->team['name']; ?></h1>
+    <hr />
+    <?php foreach($this->team['Players'] as $player): ?>
+   
+    <?php 
+    echo $player['last_name']." ".$player['first_name']."<br />" ;
+    endforeach;
+?>
+</div>-->

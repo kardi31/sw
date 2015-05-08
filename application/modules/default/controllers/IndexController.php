@@ -159,15 +159,19 @@ class Default_IndexController extends MF_Controller_Action
         
 	$form->getElement('name')->clearDecorators();
 	$form->getElement('name')->addDecorator('viewHelper');
+	$form->getElement('name')->addDecorator('Errors');
 	
 	$form->getElement('email')->clearDecorators();
 	$form->getElement('email')->addDecorator('viewHelper');
+	$form->getElement('email')->addDecorator('Errors');
 	
-	$form->getElement('subject')->clearDecorators();
-	$form->getElement('subject')->addDecorator('viewHelper');
+	$form->getElement('phone')->clearDecorators();
+	$form->getElement('phone')->addDecorator('viewHelper');
+	$form->getElement('phone')->addDecorator('Errors');
 	
 	$form->getElement('message')->clearDecorators();
 	$form->getElement('message')->addDecorator('viewHelper');
+	$form->getElement('message')->addDecorator('Errors');
 	
         $captchaDir = Zend_Controller_Front::getInstance()->getParam('bootstrap')->getOption('captchaDir');
         $form->addElement('captcha', 'captcha',
@@ -176,7 +180,7 @@ class Default_IndexController extends MF_Controller_Action
             'captcha' => array(
                 'captcha' => 'Image',  
                 'wordLen' => 5,  
-                'timeout' => 300,  
+                'timeout' => 300,
                 'font' => APPLICATION_PATH . '/../data/arial.ttf',  
                 'imgDir' => $captchaDir,  
                 'imgUrl' => $this->view->serverUrl() . '/captcha/',  
@@ -197,7 +201,6 @@ class Default_IndexController extends MF_Controller_Action
                     $this->_helper->redirector->gotoUrl($this->view->url(array('success' => 'fail'), 'domain-contact'));
                     
                 } catch(Exception $e) {
-                    var_dump($e->getMessage());exit;
                     $this->_service->get('doctrine')->getCurrentConnection()->rollback();
                     $this->_service->get('log')->log($e->getMessage(), 4);
                 }
@@ -249,5 +252,30 @@ class Default_IndexController extends MF_Controller_Action
         $this->view->assign('tree', $tree);
         
         $this->_helper->viewRenderer->setNoRender();
+    }
+    
+     public function aboutUsAction() {
+       
+        $pageService = $this->_service->getService('Page_Service_Page');
+        $metatagService = $this->_service->getService('Default_Service_Metatag');
+
+        if(!$page = $pageService->getI18nPage('about-us', 'type', $this->language, Doctrine_Core::HYDRATE_RECORD)) {
+            throw new Zend_Controller_Action_Exception('Page not found');
+        }
+        
+        if(!$dlaMediow = $pageService->getI18nPage('dla-mediow', 'type', $this->language, Doctrine_Core::HYDRATE_RECORD)) {
+            throw new Zend_Controller_Action_Exception('Page not found');
+        }
+        
+        $boardService = $this->_service->getService('League_Service_Board');
+        $boards = $boardService->getAllBoards(Doctrine_Core::HYDRATE_ARRAY);
+        $this->view->assign('boards',$boards);
+        
+        $metatagService->setViewMetatags($page['metatag_id'], $this->view);
+        
+        $this->_helper->actionStack('layout', 'index', 'default');
+        $this->view->assign('page', $page);
+        $this->view->assign('dlaMediow', $dlaMediow);
+        $this->view->assign('hideSlider', true);
     }
 }

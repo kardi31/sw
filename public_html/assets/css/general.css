@@ -2144,9 +2144,24 @@ article.blog-item {
       overflow: hidden;
   position: relative;
 }
+ul.errors li{
+    background: #ff0000;
+    padding: 5px;
+    text-align: center;
+}
+
+#bc-t{
+    background:#122737;
+}
 
   hr.bar{
       border:10px solid #0C2F99;
+      margin:0px;
+      margin-top:20px;
+      padding:0px;
+  }
+   hr.bar.dark-purple{
+      border:10px solid #122737;
       margin:0px;
       margin-top:20px;
       padding:0px;

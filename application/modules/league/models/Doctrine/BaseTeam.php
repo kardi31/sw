@@ -11,9 +11,11 @@
  * @property integer $league_id
  * @property boolean $my_team
  * @property integer $logo_id
+ * @property integer $teamphoto_id
  * @property League_Model_Doctrine_League $League
  * @property Doctrine_Collection $Matches1
  * @property League_Model_Doctrine_Tabela $Tabela
+ * @property League_Model_Doctrine_Coach $Coach
  * @property Doctrine_Collection $Players
  * 
  * @package    Admi
@@ -52,6 +54,10 @@ abstract class League_Model_Doctrine_BaseTeam extends Doctrine_Record
              'type' => 'integer',
              'length' => '4',
              ));
+        $this->hasColumn('teamphoto_id', 'integer', 4, array(
+             'type' => 'integer',
+             'length' => '4',
+             ));
 
         $this->option('type', 'MyISAM');
         $this->option('collate', 'utf8_general_ci');
@@ -70,6 +76,10 @@ abstract class League_Model_Doctrine_BaseTeam extends Doctrine_Record
              'foreign' => 'team1'));
 
         $this->hasOne('League_Model_Doctrine_Tabela as Tabela', array(
+             'local' => 'id',
+             'foreign' => 'team_id'));
+
+        $this->hasOne('League_Model_Doctrine_Coach as Coach', array(
              'local' => 'id',
              'foreign' => 'team_id'));
 

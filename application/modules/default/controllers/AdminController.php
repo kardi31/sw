@@ -242,6 +242,25 @@ class Default_AdminController extends MF_Controller_Action {
         $elementId = $this->getRequest()->getParam('element-id');
         
         switch($type):
+            case 'team':
+                $class = 'League_Model_Doctrine_Team';
+                $backUrl = $this->view->adminUrl('edit-team', 'league', array('id' => $elementId));
+                break;
+            case 'team-photo':
+                $class = 'League_Model_Doctrine_Team';
+                $dimensions = $class::getTeamPhotoDimensions();
+                $backUrl = $this->view->adminUrl('edit-team', 'league', array('id' => $elementId));
+                break;
+            case 'page-main':
+                $class = 'Page_Model_Doctrine_Page';
+                $dimensions = $class::getPageMainPhotoDimensions();
+                $backUrl = $this->view->adminUrl('edit-page', 'page', array('id' => $elementId));
+                break;
+            case 'page':
+                $class = 'Page_Model_Doctrine_Page';
+                $dimensions = $class::getPagePhotoDimensions();
+                $backUrl = $this->view->adminUrl('edit-page', 'page', array('id' => $elementId));
+                break;
             case 'player':
                 $class = 'League_Model_Doctrine_Player';
                 $backUrl = $this->view->adminUrl('edit-player', 'league', array('id' => $elementId));
@@ -250,44 +269,34 @@ class Default_AdminController extends MF_Controller_Action {
                 $class = 'Gallery_Model_Doctrine_Gallery';
                 $backUrl = $this->view->adminUrl('edit-gallery', 'gallery', array('id' => $elementId));
                 break;
+            case 'coach':
+                $class = 'League_Model_Doctrine_Coach';
+                $backUrl = $this->view->adminUrl('edit-coach', 'league', array('id' => $elementId));
+                break;
         endswitch;
         
-        $dimensions = $class::getPhotoDimensions();
+        if(!isset($dimensions)){
+            $dimensions = $class::getPhotoDimensions();
+        }
         
-        
-        
-//        $photosDir = $photoService->photosDir;
-//        $offsetDir = realpath($photosDir . DIRECTORY_SEPARATOR . $photo->getOffset());
-//        if(strlen($photo->getFilename()) > 0 && file_exists($offsetDir . DIRECTORY_SEPARATOR . $photo->getFilename())) {
-//            list($width, $height) = getimagesize($offsetDir . DIRECTORY_SEPARATOR . $photo->getFilename());
-//            $this->view->assign('imgDimensions', array('width' => $width, 'height' => $height));
-//        }
-//        
-//        if($this->getRequest()->isPost()) {
-//            if($form->isValid($this->getRequest()->getParams())) {
-//                try {
-//                    $this->_service->get('doctrine')->getCurrentConnection()->beginTransaction();
-//                    
-//                    $values = $form->getValues();
-//                    $photo = $photoService->saveFromArray($values);
-//
-//                    $this->_service->get('doctrine')->getCurrentConnection()->commit();
-//                    
-//                    if($this->getRequest()->getParam('saveOnly') == '1')
-//                        $this->_helper->redirector->gotoUrl($this->view->adminUrl('edit-product-photo', 'product', array('id' => $photo->getId(), 'product-id' => $product->getId())));
-//                    
-//                    $this->_helper->redirector->gotoUrl($this->view->adminUrl('edit-product', 'product', array('id' => $product->getId())));
-//                } catch(Exception $e) {
-//                    $this->_service->get('doctrine')->getCurrentConnection()->rollback();
-//                    $this->_service->get('Logger')->log($e->getMessage(), 4);
-//                }
-//            }
-//        }
-//          
-//        $this->view->admincontainer->findOneBy('id', 'cropproductphoto')->setActive();
-//        $this->view->admincontainer->findOneBy('id', 'editphotoproduct')->setLabel($product->Translation[$adminLanguage->getId()]->name);
-//        $this->view->admincontainer->findOneBy('id', 'editphotoproduct')->setParam('id', $product->getId());
-//        $this->view->adminTitle = $this->view->translate($this->view->admincontainer->findOneBy('id', 'cropproductphoto')->getLabel());
+        if($this->getRequest()->isPost()) {
+            if($form->isValid($this->getRequest()->getParams())) {
+                try {
+                    $this->_service->get('doctrine')->getCurrentConnection()->beginTransaction();
+                    
+                    $values = $form->getValues();
+                    $photo->set('title',$values['title']);
+                    $photo->save();
+
+                    $this->_service->get('doctrine')->getCurrentConnection()->commit();
+                    
+                    $this->_helper->redirector->gotoUrl($backUrl);
+                } catch(Exception $e) {
+                    $this->_service->get('doctrine')->getCurrentConnection()->rollback();
+                    $this->_service->get('Logger')->log($e->getMessage(), 4);
+                }
+            }
+        }
         
         $this->view->assign('dimensions', $dimensions);
         $this->view->assign('elementId', $elementId);

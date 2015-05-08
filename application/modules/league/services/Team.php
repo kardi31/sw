@@ -33,6 +33,47 @@ class League_Service_Team extends MF_Service_ServiceAbstract {
         return $wynik['Players'];
     }
     
+    public function getMyTeams($hydrationMode = Doctrine_Core::HYDRATE_RECORD) {    
+        $q = $this->teamTable->createQuery('t');
+        $q->innerJoin('t.League l');
+        $q->leftJoin('l.Group g');
+        $q->addWhere('t.my_team = 1');
+        $q->addWhere('l.active = 1');
+        
+        return $q->execute(array(),$hydrationMode);
+    }
+    
+    public function prependMyTeamsOptions(){
+        $teams = $this->getMyTeams();
+        $result = array();
+        foreach($teams as $team):
+            $result[$team['id']] = $team['name']." - ".$team['League']['Group']['name']." - ".$team['League']['name'];
+        endforeach;
+        
+        return $result;
+    }
+    
+    public function getMyTeamCoach($group_id, $hydrationMode = Doctrine_Core::HYDRATE_RECORD) {    
+        $q = $this->teamTable->createQuery('t');
+        $q->innerJoin('t.League l');
+        $q->leftJoin('t.Coach c');
+        $q->leftJoin('c.Photo p');
+        $q->addWhere('l.group_id = ?',$group_id);
+        $q->addWhere('t.my_team = 1');
+        $q->orderBy("FIELD(position,'Bramkarz','Obrońca','Pomocnik','Napastnik')");
+        $wynik = $q->fetchOne(array(),$hydrationMode);
+        return $wynik['Coach'];
+    }
+    
+    public function getMyTeam($group_id, $hydrationMode = Doctrine_Core::HYDRATE_RECORD) {    
+        $q = $this->teamTable->createQuery('t');
+        $q->innerJoin('t.League l');
+        $q->leftJoin('t.TeamPhoto p');
+        $q->addWhere('l.group_id = ?',$group_id);
+        $q->addWhere('t.my_team = 1');
+        return $q->fetchOne(array(),$hydrationMode);
+    }
+    
     public function getMyTeamPlayers($group_id, $hydrationMode = Doctrine_Core::HYDRATE_RECORD) {    
         $q = $this->teamTable->createQuery('t');
         $q->innerJoin('t.League l');

@@ -20,12 +20,12 @@ class Page_Model_Doctrine_Page extends Page_Model_Doctrine_BasePage
     
       public static $pagePhotoDimensions = array(
         '126x126' => 'Photo in admin panel', // admin
-        '160x' => 'Mini',
+        '940x365' => 'Mini',
     );
 
     public static $pageMainPhotoDimensions = array(
         '126x126' => 'Photo in admin panel',                  // admin
-        '160x' => 'Mini',
+        '301x298' => 'Mini',
     );
     
     public static function getPagePhotoDimensions() {

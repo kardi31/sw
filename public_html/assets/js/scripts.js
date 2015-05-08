@@ -100,6 +100,7 @@ $(document).ready(function(){
     minSlides: 1,
     maxSlides: 4,
     randomStart: true,
+    controls: false,
     speed: 1000,
     auto: true,
 	pager: false,

@@ -12,5 +12,12 @@
  */
 class League_Model_Doctrine_League extends League_Model_Doctrine_BaseLeague
 {
-    
+    public function setUp()
+    {
+        parent::setUp();
+        $this->hasOne('League_Model_Doctrine_Group as Group', array(
+             'local' => 'group_id',
+             'foreign' => 'id'));
+
+    }
 }

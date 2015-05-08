@@ -660,5 +660,261 @@ class League_AdminController extends MF_Controller_Action {
         $this->view->assign('form', $form);
         $this->view->assign('team', $team);
     }
+    
+    /*
+     * 
+     *  coaches
+     * 
+     * 
+     */
+    
+    public function addCoachAction() {
+        $teamService = $this->_service->getService('League_Service_Team');
+        $coachService = $this->_service->getService('League_Service_Coach');
+               
+        $form = $coachService->getCoachForm();
+        
+        $form->getElement('team_id')->addMultiOptions($teamService->prependMyTeamsOptions());
+        
+         
+        if($this->getRequest()->isPost()) {
+            if($form->isValid($this->getRequest()->getParams())) {
+                try {
+                    $this->_service->get('doctrine')->getCurrentConnection()->beginTransaction();
+                    
+                    $values = $_POST;
+
+		    $coachService->saveCoachFromArray($values);
+		    
+                    $this->_service->get('doctrine')->getCurrentConnection()->commit();
+                
+                    $this->_helper->redirector->gotoUrl($this->view->adminUrl('list-coach', 'league'));
+                } catch(Exception $e) {
+		    var_dump($e->getMessage());exit;
+                    $this->_service->get('doctrine')->getCurrentConnection()->rollback();
+                    $this->_service->get('log')->log($e->getMessage(), 4);
+                }
+            }
+        }
+        
+        $this->view->assign('form', $form);
+    }
+    
+    public function editCoachAction() {
+        $teamService = $this->_service->getService('League_Service_Team');
+        $coachService = $this->_service->getService('League_Service_Coach');
+        
+	if(!$coach = $coachService->getCoach((int) $this->getRequest()->getParam('id'))) {
+            throw new Zend_Controller_Action_Exception('Player not found');
+        }
+        
+        
+        $form = $coachService->getCoachForm($coach);
+        
+        $form->getElement('team_id')->addMultiOptions($teamService->prependMyTeamsOptions());
+        $form->getElement('team_id')->setValue($coach->get('team_id'));
+         
+        if($this->getRequest()->isPost()) {
+            if($form->isValid($this->getRequest()->getParams())) {
+                try {
+                    $this->_service->get('doctrine')->getCurrentConnection()->beginTransaction();
+                    
+                    $values = $_POST;
+
+		    $coachService->saveCoachFromArray($values);
+		    
+                    $this->_service->get('doctrine')->getCurrentConnection()->commit();
+                
+                    $this->_helper->redirector->gotoUrl($this->view->adminUrl('list-coach', 'league'));
+                } catch(Exception $e) {
+		    var_dump($e->getMessage());exit;
+                    $this->_service->get('doctrine')->getCurrentConnection()->rollback();
+                    $this->_service->get('log')->log($e->getMessage(), 4);
+                }
+            }
+        }
+        
+        $this->view->assign('player', $player);
+        $this->view->assign('league_id', $league_id);
+        $this->view->assign('form', $form);
+        $this->view->assign('coach', $coach);
+    }
+    
+    public function removeCoachAction() {
+        $coachService = $this->_service->getService('League_Service_Coach');
+        
+	if(!$coach = $coachService->getCoach((int) $this->getRequest()->getParam('id'))) {
+            throw new Zend_Controller_Action_Exception('Player not found');
+        }
+        
+        $coach->delete();
+        
+        $this->_helper->redirector->gotoUrl($this->view->adminUrl('list-coach', 'league'));
+                
+        
+    }
+    
+    
+    public function listCoachAction() {
+        
+    }
+    
+    public function listCoachDataAction() {
+        $table = Doctrine_Core::getTable('League_Model_Doctrine_Coach');
+        $dataTables = Default_DataTables_Factory::factory(array(
+            'request' => $this->getRequest(), 
+            'table' => $table, 
+            'class' => 'League_DataTables_Coach', 
+            'columns' => array('c.id','c.first_name','c.last_name','t.name'),
+            'searchFields' => array('c.id', 'c.first_name','c.last_name','t.name')
+        ));
+        
+        $results = $dataTables->getResult();
+        $rows = array();
+        foreach($results as $result) {
+            $row = array();
+            $row[] = $result['id'];
+            $row[] = $result['first_name'];
+            $row[] = $result['last_name'];
+            $row[] = $result['Team']['name'].' <br /> '.$result['Team']['League']['name'].' - '.$result['Team']['League']['Group']['name'];
+            
+            $options = '<a href="' . $this->view->adminUrl('edit-coach', 'league', array('id' => $result['id'])). '" title ="' . $this->view->translate('Edit') . '"><span class="icon24 entypo-icon-settings"></span></a>&nbsp;&nbsp;';     
+             
+            $options .= '<a href="' . $this->view->adminUrl('remove-coach', 'league', array('id' => $result['id'])) . '" class="remove" title="' . $this->view->translate('Remove') . '"><span class="icon16 icomoon-icon-remove"></span></a>';
+            $row[] = $options;
+            $rows[] = $row;
+        }
+
+        $response = array(
+            "sEcho" => intval($_GET['sEcho']),
+            "iTotalRecords" => $dataTables->getDisplayTotal(),
+            "iTotalDisplayRecords" => $dataTables->getTotal(),
+            "aaData" => $rows
+        );
+        $this->_helper->json($response);
+    }
+    
+    /*
+     * 
+     *  coaches
+     * 
+     * 
+     */
+    
+    public function addBoardAction() {
+        $boardService = $this->_service->getService('League_Service_Board');
+               
+        $form = $boardService->getBoardForm();
+        
+         
+        if($this->getRequest()->isPost()) {
+            if($form->isValid($this->getRequest()->getParams())) {
+                try {
+                    $this->_service->get('doctrine')->getCurrentConnection()->beginTransaction();
+                    
+                    $values = $_POST;
+
+		    $boardService->saveBoardFromArray($values);
+		    
+                    $this->_service->get('doctrine')->getCurrentConnection()->commit();
+                
+                    $this->_helper->redirector->gotoUrl($this->view->adminUrl('list-board', 'league'));
+                } catch(Exception $e) {
+		    var_dump($e->getMessage());exit;
+                    $this->_service->get('doctrine')->getCurrentConnection()->rollback();
+                    $this->_service->get('log')->log($e->getMessage(), 4);
+                }
+            }
+        }
+        
+        $this->view->assign('form', $form);
+    }
+    
+    public function editBoardAction() {
+        $boardService = $this->_service->getService('League_Service_Board');
+        
+	if(!$board = $boardService->getBoard((int) $this->getRequest()->getParam('id'))) {
+            throw new Zend_Controller_Action_Exception('Board not found');
+        }
+        
+        $form = $boardService->getBoardForm($board);
+         
+        if($this->getRequest()->isPost()) {
+            if($form->isValid($this->getRequest()->getParams())) {
+                try {
+                    $this->_service->get('doctrine')->getCurrentConnection()->beginTransaction();
+                    
+                    $values = $_POST;
+
+		    $boardService->saveBoardFromArray($values);
+		    
+                    $this->_service->get('doctrine')->getCurrentConnection()->commit();
+                
+                    $this->_helper->redirector->gotoUrl($this->view->adminUrl('list-board', 'league'));
+                } catch(Exception $e) {
+		    var_dump($e->getMessage());exit;
+                    $this->_service->get('doctrine')->getCurrentConnection()->rollback();
+                    $this->_service->get('log')->log($e->getMessage(), 4);
+                }
+            }
+        }
+        
+        $this->view->assign('board', $board);
+        $this->view->assign('form', $form);
+    }
+    
+    public function removeBoardAction() {
+        $boardService = $this->_service->getService('League_Service_Board');
+        
+	if(!$board = $boardService->getBoard((int) $this->getRequest()->getParam('id'))) {
+            throw new Zend_Controller_Action_Exception('Board not found');
+        }
+        
+        $board->delete();
+        
+        $this->_helper->redirector->gotoUrl($this->view->adminUrl('list-board', 'league'));
+                
+        
+    }
+    
+    
+    public function listBoardAction() {
+        
+    }
+    
+    public function listBoardDataAction() {
+        $table = Doctrine_Core::getTable('League_Model_Doctrine_Board');
+        $dataTables = Default_DataTables_Factory::factory(array(
+            'request' => $this->getRequest(), 
+            'table' => $table, 
+            'class' => 'League_DataTables_Board', 
+            'columns' => array('b.id','b.first_name','b.last_name'),
+            'searchFields' => array('b.id', 'b.first_name','b.last_name')
+        ));
+        
+        $results = $dataTables->getResult();
+        $rows = array();
+        foreach($results as $result) {
+            $row = array();
+            $row[] = $result['id'];
+            $row[] = $result['first_name'];
+            $row[] = $result['last_name'];
+            $row[] = $result['position'];
+            
+            $options = '<a href="' . $this->view->adminUrl('edit-board', 'league', array('id' => $result['id'])). '" title ="' . $this->view->translate('Edit') . '"><span class="icon24 entypo-icon-settings"></span></a>&nbsp;&nbsp;';     
+             
+            $options .= '<a href="' . $this->view->adminUrl('remove-board', 'league', array('id' => $result['id'])) . '" class="remove" title="' . $this->view->translate('Remove') . '"><span class="icon16 icomoon-icon-remove"></span></a>';
+            $row[] = $options;
+            $rows[] = $row;
+        }
+
+        $response = array(
+            "sEcho" => intval($_GET['sEcho']),
+            "iTotalRecords" => $dataTables->getDisplayTotal(),
+            "iTotalDisplayRecords" => $dataTables->getTotal(),
+            "aaData" => $rows
+        );
+        $this->_helper->json($response);
+    }
 }
 
