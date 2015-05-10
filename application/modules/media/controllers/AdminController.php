@@ -73,17 +73,23 @@ class Media_AdminController extends MF_Controller_Action
         
         $mediaDir = $this->getFrontController()->getParam('bootstrap')->getOption('mediaDir');
         $elfinderUrl = $this->getFrontController()->getParam('bootstrap')->getOption('elfinderUrl');
+        $absoluteElfinderUrl = $this->getFrontController()->getParam('bootstrap')->getOption('absoluteElfinderUrl');
         $opts = array(
             // 'debug' => true,
             'roots' => array(
                 array(
                     'driver'        => 'LocalFileSystem',   // driver for accessing file system (REQUIRED)
-                    'path'          => $mediaDir . '/elfinder/',
+                    'path'          => $absoluteElfinderUrl,
                     'URL'           => $elfinderUrl, // URL to files (REQUIRED)
 //                    'accessControl' => 'access'             // disable and hide dot starting files (OPTIONAL)
                 )
             )
         );
+        
+//        var_dump(realpath($mediaDir . '/elfinder/'));exit;
+//        var_dump(realpath(APPLICATION_PATH."/../public_html/media/elfinder"));
+////        var_dump($mediaDir . '/elfinder/');
+//        var_dump($elfinderUrl);exit;
         // run elFinder
         $connector = new elFinderConnector(new elFinder($opts));
         $connector->run();

@@ -6,7 +6,28 @@
                         <li>
                                 <img src="/assets/images/stadion.jpg" alt=""/>
                                 <div class="caption"><div class="container">
-                                <h1><span>Witamy</span>na stronie</h1>
+                                <h1><span>Witamy</span>na stronie
+                                <?php switch(APPLICATION_TYPE):
+                                    case 'juniorzystarsi':
+                                        echo " juniorów starszych";
+                                        break;
+                                    case 'juniorzymlodsi':
+                                        echo " juniorów młodszych";
+                                        break;
+                                    case 'trampkarze':
+                                        echo " trampkarzy";
+                                        break;
+                                    case 'mlodzicy':
+                                        echo " młodzików";
+                                        break;
+                                    case 'orliki':
+                                        echo " orlików";
+                                        break;
+                                    default:
+                                        echo '';
+                                endswitch;
+                                ?>
+                                </h1>
                                 <!--<a href="blog-single.html" class="btn btn-bordered">read more</a>-->
                                 </div></div>
                         </li>

@@ -5,8 +5,32 @@ defined('APPLICATION_PATH')
     || define('APPLICATION_PATH', realpath(dirname(__FILE__) . '/../application'));
 
 // Define application environment
-defined('APPLICATION_ENV')
-    || define('APPLICATION_ENV', 'development');
+if(strstr($_SERVER['HTTP_HOST'],'localhost')){
+    if(strstr($_SERVER['HTTP_HOST'],'juniorzystarsi')){
+        defined('APPLICATION_ENV')|| define('APPLICATION_ENV', 'juniorzystarsidevelopment');
+        defined('APPLICATION_TYPE')|| define('APPLICATION_TYPE', 'juniorzystarsi');
+    }
+    elseif(strstr($_SERVER['HTTP_HOST'],'juniorzymlodsi')){
+        defined('APPLICATION_ENV')|| define('APPLICATION_ENV', 'juniorzymlodsidevelopment');
+        defined('APPLICATION_TYPE')|| define('APPLICATION_TYPE', 'juniorzymlodsi');
+    }
+    elseif(strstr($_SERVER['HTTP_HOST'],'trampkarze')){
+        defined('APPLICATION_ENV')|| define('APPLICATION_ENV', 'trampkarzedevelopment');
+        defined('APPLICATION_TYPE')|| define('APPLICATION_TYPE', 'trampkarze');
+    }
+    elseif(strstr($_SERVER['HTTP_HOST'],'mlodzicy')){
+        defined('APPLICATION_ENV')|| define('APPLICATION_ENV', 'mlodzicydevelopment');
+        defined('APPLICATION_TYPE')|| define('APPLICATION_TYPE', 'mlodzicy');
+    }
+    elseif(strstr($_SERVER['HTTP_HOST'],'orliki')){
+        defined('APPLICATION_ENV')|| define('APPLICATION_ENV', 'orlikidevelopment');
+        defined('APPLICATION_TYPE')|| define('APPLICATION_TYPE', 'orliki');
+    }
+    else{
+        defined('APPLICATION_ENV')|| define('APPLICATION_ENV', 'development');
+        defined('APPLICATION_TYPE')|| define('APPLICATION_TYPE', 'seniorzy');
+    }
+}
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(

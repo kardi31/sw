@@ -1,12 +1,14 @@
 <?php if(isset($this->tree)): ?>
     <ul class="clearfix">
     <?php foreach($this->tree as $item): ?>
-        <li>
+        <li <?php if($item->getNode()->hasChildren()): ?> class="dropdown" <?php endif; ?>>
                 <a href="<?php echo $this->url(array('slug' => $item['Translation'][$this->language]['slug']),$item['route']) ;?>"><?php echo $item->Translation[$this->language]->title; ?></a>
 
-            <?php if($item->getNode()->getChildren()): ?>
-                <?php echo $this->partial('menu-main-tree.phtml', 'menu', array('subtree' => $item->getNode()->getChildren(), 'parent' => $item, 'language' => $this->language)) ?>
-            <?php endif; ?>
+            <?php if($item->getNode()->getChildren()):
+                ?>
+                <?php echo $this->partial('menu_main_tree.phtml', 'menu', array('subtree' => $item->getNode()->getChildren(), 'parent' => $item, 'language' => $this->language)) ?>
+            <?php 
+            endif; ?>
         </li>
         <?php endforeach; ?>
     </ul>
@@ -15,20 +17,8 @@
         <?php foreach($this->subtree as $item): ?>
             <?php if($item->Translation[$this->language]->title): ?>
             <li>
-                <?php if($item['target_type'] && count($item['Articles']) > 0): ?>
-                    <?php if(count($item['Articles']) < 2 && $item->Translation[$this->language]->slug): ?>
-                        <a href="<?php echo $this->url(array('slug' => $item->Translation[$this->language]->slug), 'domain-i18n:article-page') ?>"><?php echo $item->Translation[$this->language]->title; ?></a>
-                    <?php else: ?>
-                        <a href="<?php echo $this->url(array('slug' => $item->Translation[$this->language]->slug), 'domain-i18n:article-list') ?>"><?php echo $item->Translation[$this->language]->title; ?></a>
-                    <?php endif; ?>
-                <?php else: ?>
-                    <a href="javascript:void(0)"><?php echo $item->Translation[$this->language]->title; ?></a>
-                <?php endif; ?>
-                <?php if($item->getNode()->getChildren()): ?>
-                <?php echo $this->partial('menu-main-tree.phtml', 'menu', array('subtree' => $item->getNode()->getChildren(), 'parent' => $item, 'language' => $this->language)) ?>
-                <?php else:
-                        echo $item->Translation[$this->language]->slug;
-                    endif; ?>
+                <a href="http://<?php echo str_replace('-','',$item->Translation[$this->language]->slug) ?>.swit.localhost"><?php echo $item->Translation[$this->language]->title; ?></a>
+                 
             </li>
             <?php endif; ?>
         <?php endforeach; ?>

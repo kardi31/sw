@@ -10,7 +10,6 @@ class User_AuthController extends MF_Controller_Action
 //        if(Zend_Auth::getInstance()->hasIdentity()) {
 //            $this->_helper->redirector->gotoRoute(array(), 'domain-user-profile');
 //        }
-        
         $this->view->messages()->clean();
         
 	$translator = $this->getFrontController()->getParam('bootstrap')->getContainer()->get('translate');
@@ -26,7 +25,6 @@ class User_AuthController extends MF_Controller_Action
         if($this->getRequest()->getCookie('remember_me') == 'true') {
             $form->getElement('remember')->setChecked(true);
         }
-       
 	if($this->getRequest()->isPost()) {
             if($form->isValid($this->getRequest()->getParams())) {
                 $user = $userService->getUser($form->getValue('username'), 'email');
@@ -46,7 +44,6 @@ class User_AuthController extends MF_Controller_Action
                             $this->_helper->redirector->gotoUrl('/');
                         endif;
                     } 
-
                     // error handling
                         switch($result->getCode()) {
                             case Zend_Auth_Result::FAILURE_IDENTITY_NOT_FOUND:
